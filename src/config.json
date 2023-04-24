@@ -1,0 +1,8 @@
+{
+  "aesKey": "{Your PallyCon Site Key}",
+  "type" : "unlabeled_a_variant",
+  "availableInterval": 60000,
+  "prefixFolder": ["dldzkdpsxmdnjrtm", "wm-contents"],
+  "wmtPublicKey": "{Your PallyCon Akamai Public Key}",
+  "wmtPassword": "{Your PallyCon Akamai Key Password}"
+}
