@@ -12,7 +12,10 @@
 ## Steps
 ### Step1. Install npm and source download
 - You can download and install file from the [npm site page](https://nodejs.org/en/download) 
-- You can be downloaded sample file from the [Sample download page](https://pallycon.com/docs/en/forensic-watermarking/getting-started/fwm-downloads).
+- You can clone this sample project.
+```
+git clone https://github.com/inka-pallycon/fwm-cdn-embedder-generator.git
+```
 
 ### Step2. Install Package
 ```bash
