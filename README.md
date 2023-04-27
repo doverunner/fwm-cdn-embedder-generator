@@ -11,8 +11,8 @@
 
 ## Steps
 ### Step1. Install npm and source download
-- You can download and install file from the [npm site page](https://nodejs.org/en/download) 
-- You can be downloaded sample file from the [Sample download page](https://pallycon.com/docs/en/forensic-watermarking/getting-started/fwm-downloads).
+- You can download and install file from the [npm site page](https://nodejs.org/en/download)
+- You can clone this sample project.
 
 ### Step2. Install Package
 ```bash
@@ -35,7 +35,7 @@ In the config.ts file, you can set
 - Akamai config settings
 
 Please create an output bucket that will be connected to the CDN in advance and proceed.  
-And this CDK sample may not work if your output bucket's default encryption used `SSE-KMS`. 
+And this CDK sample may not work if your output bucket's default encryption used `SSE-KMS`.
 Please, set bucket default encryption to `SSE-S3`.
 
 | Name              | Required | Description                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -63,7 +63,11 @@ aws sts get-caller-identity
 cdk bootstrap aws://{{ACCOUNT-NUMBER}}/us-east-1
 ```
 
+> ❕ Permission errors can occur if you have MFA enabled on your IAM account. You can resolve the error by acquiring and applying the session token of [aws sts](https://awscli.amazonaws.com/v2/documentation/api/2.1.30/reference/sts/get-session-token.html).
+
 ### Step6. Deploy
+If Bootstrapping on Step5 successes, deploy the cdk.
+
 ```bash
 cdk deploy
 ```
