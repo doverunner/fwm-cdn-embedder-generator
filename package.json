@@ -1,6 +1,6 @@
 {
   "name": "wm-cdn-embedder-gnearator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "bin": {
     "wm-cdn-embedder-gnearator": "bin/wm-cdn-embedder-genearator.js"
   },

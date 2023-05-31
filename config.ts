@@ -33,7 +33,7 @@ export const config: IConfig = {
 
     /**
      * Enter the name of forensic watermark content output bucket region. It must be created before running.
-     * bucket region : us-east-1, ap-northeast-1, ap-northeast-2, ap-southeast-1, eu-central-1
+     * bucket region : us-west-2, ap-northeast-1, ap-northeast-2, ap-southeast-1, eu-central-1
      */
     s3BucketRegion: '{Your output bucket region}',
 

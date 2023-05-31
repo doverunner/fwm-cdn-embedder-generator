@@ -107,12 +107,20 @@ exports.createWatermarkUrl= (contentPath, watermark, prefixFolder='', streamingF
     return responseUrl;
 }
 
+/**
+ * Create a path by adding /0 in front of the flagFolders path in the contentPath.
+ * @param contentPath  excluding the prefix folder path
+ * @returns {string} default path
+ */
 const makeDefaultPath = (contentPath) =>{
+    const flagFolders = ['dash', 'hls', 'cmaf'];
+
     var responseUrl = "";
     var pathArr = contentPath.split('/');
     var pathArrLength = pathArr.length;
+
     for (var i=1; i<pathArrLength; i++) {
-        if (pathArr[i] === 'dash' || pathArr[i] === 'hls') {
+        if (flagFolders.includes(pathArr[i])) {
             responseUrl += '/0';
         }
         responseUrl += '/'+ pathArr[i];
