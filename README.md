@@ -1,4 +1,4 @@
-# PallyCon Watermark CDN Embedder Generator
+# DoveRunner Watermark CDN Embedder Generator
 
 ## Version
 - 1.0.0
@@ -31,7 +31,7 @@ npm install -g aws-cdk
 ### Step4. Put your Configuration Settings in config.ts
 In the config.ts file, you can set
 - AWS config settings
-- PallyCon config settings
+- DoveRunner config settings
 - Akamai config settings
 
 Please create an output bucket that will be connected to the CDN in advance and proceed.  
@@ -46,12 +46,12 @@ Please, set bucket default encryption to `SSE-S3`.
 | s3BucketRegion    | true     | Enter the region of forensic watermark content output bucket. <br/> **It must be created before running**.                                                                                                                                                                                                                                                                                              |
 | lambdaName        | true     | Enter the name of lambda@Edge function to be created.                                                                                                                                                                                                                                                                                                                                                   |
 | lambdaRoleName    | true     | Enter the name of lambda role to be created.                                                                                                                                                                                                                                                                                                                                                            |
-| aesKey            | true     | Enter the site key value provided by the PallyCon console site.                                                                                                                                                                                                                                                                                                                                         |
+| aesKey            | true     | Enter the site key value provided by the DoveRunner console site.                                                                                                                                                                                                                                                                                                                                         |
 | availableInterval | true     | The URL requested for watermarking contains a timestamp value. This item is the value for checking the validity of the timestamp. If set to 0, the timestamp validity period is not checked. (Unit: minutes)                                                                                                                                                                                            |
-| fwmType           | false    | Enter unlabeled_a_variant if preprocessed A/B version segments are stored together in one folder, and enter `directory_prefix` if they are packaged in separate 0 and 1 folders. If you use the latest version of the FWM CLI packager or if you are a new customer of PallyCon SaaS packaging service, it is basically packaged in the form of `Unlabeled A Variant`. (default: `unlabeled_a_variant`) |
+| fwmType           | false    | Enter unlabeled_a_variant if preprocessed A/B version segments are stored together in one folder, and enter `directory_prefix` if they are packaged in separate 0 and 1 folders. If you use the latest version of the FWM CLI packager or if you are a new customer of DoveRunner SaaS packaging service, it is basically packaged in the form of `Unlabeled A Variant`. (default: `unlabeled_a_variant`) |
 | prefixFolder      | true     | Set the name of the parent folder where the A/B version contents are stored<br/> - For contents packaged with old version packaging service: `dldzkdpsxmdnjrtm`<br/> - For contents packaged with the new T&P service: `wm-contents` <br/> The default value is `["dldzkdpsxmdnjrtm", "wm-contents"]`, which supports both cases.                                                                       |
-| wmtPublicKey      | false    | Set when using the `wmt` token type. Use the `Akamai public key` issued from the PallyCon site. It can be requested the helpdesk.                                                                                                                                                                                                                                                                       |
-| wmtPassword       | false    | Set when using the `wmt` token type. Use the `Akamai password` issued from the PallyCon site. It can be requested the helpdesk.                                                                                                                                                                                                                                                                         |
+| wmtPublicKey      | false    | Set when using the `wmt` token type. Use the `Akamai public key` issued from the DoveRunner site. It can be requested the helpdesk.                                                                                                                                                                                                                                                                       |
+| wmtPassword       | false    | Set when using the `wmt` token type. Use the `Akamai password` issued from the DoveRunner site. It can be requested the helpdesk.                                                                                                                                                                                                                                                                         |
 
 ### Step5. Bootstrap your AWS account
 Lambda@Edge region must be `us-east-1`. so bootstrap region is `us-east-1`.
