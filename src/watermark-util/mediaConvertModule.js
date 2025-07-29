@@ -21,23 +21,44 @@ exports.createWatermarkUrl = (contentPath, watermark, prefixFolder='', gop=60) =
 
     waterInfo.extensionIdx = waterInfo.fileName.lastIndexOf('.');
     //확장자
-    waterInfo.extension = waterInfo.fileName.substring(waterInfo.extensionIdx+1);
+    const extIdx = waterInfo.fileName.lastIndexOf('.');
+    waterInfo.name = waterInfo.fileName.substring(0, extIdx);
+    waterInfo.extension = waterInfo.fileName.substring(extIdx+1);
+
+    let seqNumber = -1;
+    let startNum = 0;
 
     switch(waterInfo.extension){
         case 'ts':
-            //xxxxx.ts
-            const fileIndex = Number(waterInfo.fileName.substring(waterInfo.fileName.lastIndexOf('_')+1, waterInfo.extensionIdx));
-            waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, 1, fileIndex, gop);
+            seqNumber = wmUtil.getSequenceNumber(waterInfo.name, 'ts');
+            if( seqNumber < 0 ){
+                break;
+            }
+
+            if('dash' !== streamingFormat) {
+                startNum = 1;
+            }
+
+            waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, startNum, seqNumber, gop);
+
             responseUrl += wmUtil.makeWatermarkPathByDir(contentPath, 2, waterInfo.wmFlag);
             break;
         case 'mp4':
+        case 'm4s':
             //init.mp4
             if (waterInfo.fileName.toLowerCase().endsWith('init.mp4')) {
                 responseUrl += wmUtil.makeWatermarkPathByDir(contentPath, 2);
             } else {
-                //xxxxxxx.mp4
-                const fileIndex = Number(waterInfo.fileName.substring(waterInfo.fileName.lastIndexOf('_')+1, waterInfo.extensionIdx));
-                waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, 1, fileIndex, gop);
+                seqNumber = wmUtil.getSequenceNumber(waterInfo.name, waterInfo.extension);
+                if (seqNumber < 0) {
+                    break;
+                }
+
+                if('hls' === streamingFormat) {
+                    startNum = 1;
+                }
+
+                waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, startNum, seqNumber, gop);
                 responseUrl += wmUtil.makeWatermarkPathByDir(contentPath, 2, waterInfo.wmFlag);
             }
             break;
