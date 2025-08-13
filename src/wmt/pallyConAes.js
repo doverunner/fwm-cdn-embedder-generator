@@ -3,7 +3,7 @@ const mediaConvertModule= require("../watermark-util/mediaConvertModule");
 const unlabeledAVariantModule= require("../watermark-util/pallyConV2Module");
 const directoryPrefixModule= require("../watermark-util/pallyConModule");
 
-exports.getContentUrl = (req, arrUri, prefixFolder, config) =>{
+exports.getContentUrl = (req, arrUri, prefixFolder, config, hasRevokeToken) =>{
     let watermarkData = arrUri[2];
     watermarkData = watermarkData.replace(/-/gi, '+');
     watermarkData = watermarkData.replace(/_/gi, '/');
@@ -18,7 +18,8 @@ exports.getContentUrl = (req, arrUri, prefixFolder, config) =>{
         "watermark_data": <watermark data>,
         "streaming_format": <dash/hls>,
         "gop":60,
-        "timestamp": < YYYY-mm-ddThh:mm:ssZ >
+        "timestamp": < YYYY-mm-ddThh:mm:ssZ >,
+        "revoke_flag": <true,false>
     }
      */
 
@@ -26,6 +27,13 @@ exports.getContentUrl = (req, arrUri, prefixFolder, config) =>{
     const watermark = new Buffer.from(watermarkInfo.watermark_data, 'base64').toString('hex');
     const timeStamp = watermarkInfo.timestamp;
     const streamingFormat = watermarkInfo.streaming_format;
+    const revokeFlag = watermarkInfo.revoke_flag;
+
+    // Check revoke flag - if revoke_flag is true but revoke_token was not present, deny access
+    if (revokeFlag && !hasRevokeToken) {
+        console.log('Access denied: revoke_flag is true but revoke_token was not provided');
+        return {status: '403', statusDescription: 'Missing required revoke token'};
+    }
 
     if(watermarkUtil.checkTimeStamp(timeStamp, config.availableInterval)){
         let fwmModule;

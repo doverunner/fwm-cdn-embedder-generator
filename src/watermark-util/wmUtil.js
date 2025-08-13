@@ -112,3 +112,15 @@ exports.makeWatermarkPathFile = (path, fileName, wm='0') => {
     }
 }
 
+exports.removeRevokeToken = (arrUri) => {
+    const watermarkData = arrUri[2].split('.');
+    const hasRevokeToken = watermarkData.length >= 2;
+
+    if (hasRevokeToken) {
+        arrUri[2] = watermarkData[1];
+    }
+    return {
+        modifiedArrUri:arrUri,
+        hasRevokeToken
+    };
+};
