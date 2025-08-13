@@ -2,7 +2,7 @@ const wmUtil = require('./wmUtil');
 
 'use strict';
 
-exports.createWatermarkUrl = (contentPath, watermark, prefixFolder='', gop=60) =>{
+exports.createWatermarkUrl = (contentPath, watermark, prefixFolder='', streamingFormat, gop=60) =>{
     let responseUrl = "/" + prefixFolder;
     let waterInfo = {};
     let separator = contentPath.lastIndexOf('?');
@@ -36,7 +36,7 @@ exports.createWatermarkUrl = (contentPath, watermark, prefixFolder='', gop=60) =
             }
 
             if('dash' !== streamingFormat) {
-                startNum = 1;
+                startNum = 0;
             }
 
             waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, startNum, seqNumber, gop);
