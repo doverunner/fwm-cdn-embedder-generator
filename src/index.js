@@ -1,6 +1,7 @@
 const config = require("./config.json");
 const pallyConAes = require('./wmt/pallyConAes');
 const akamaiWmt = require("./wmt/akamaiWmt");
+const wmUtil = require("./watermark-util/wmUtil")
 
 const checkWatermarkPath = (reqPrefixFolder) => {
     const {prefixFolder} = config;
@@ -15,7 +16,7 @@ exports.handler = async (event, context, callback) => {
     let request = event.Records[0].cf.request;
     console.log('request : ' + JSON.stringify(request));
 
-    const arrUri = request.uri.split('/');
+    let arrUri = request.uri.split('/');
     const prefixFolder = arrUri[1];
 
     if (prefixFolder.startsWith('wmt:')) {
@@ -24,7 +25,12 @@ exports.handler = async (event, context, callback) => {
     } else {
         // pallyConAes 이용
         if (checkWatermarkPath(prefixFolder)) {
-            request = pallyConAes.getContentUrl(request, arrUri, prefixFolder, config);
+            // remove revoke token
+            const { modifiedArrUri, hasRevokeToken } = wmUtil.removeRevokeToken(arrUri);
+            arrUri = modifiedArrUri;
+            request.uri = '/' + arrUri.slice(1).join('/');
+
+            request = pallyConAes.getContentUrl(request, arrUri, prefixFolder, config, hasRevokeToken);
         }
     }
 

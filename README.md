@@ -7,7 +7,7 @@
 - Language: TypeScript
 - AWS CDK : v2
 - Lambda(Node.js) : v16.x
-- Forensic Watermark CDN Embedder : v2.8.0
+- Forensic Watermark CDN Embedder : v2.9.0
 
 ## Steps
 ### Step1. Install npm and source download
