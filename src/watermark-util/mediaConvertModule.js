@@ -36,7 +36,7 @@ exports.createWatermarkUrl = (contentPath, watermark, prefixFolder='', streaming
             }
 
             if('dash' !== streamingFormat) {
-                startNum = 0;
+                startNum = 1;
             }
 
             waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, startNum, seqNumber, gop);

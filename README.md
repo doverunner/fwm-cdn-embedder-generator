@@ -1,7 +1,7 @@
 # DoveRunner Watermark CDN Embedder Generator
 
 ## Version
-- 1.0.0
+- 1.0.3
 
 ## Environment
 - Language: TypeScript
