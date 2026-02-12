@@ -16,6 +16,14 @@ exports.handler = async (event, context, callback) => {
     let request = event.Records[0].cf.request;
     console.log('request : ' + JSON.stringify(request));
 
+    // Check if filename starts with "b." and return 403
+    const filename = request.uri.split('/').pop();
+    if (filename?.startsWith('b.')) {
+        console.log('Unsafe file path request detected.');
+        callback(null, {status: '403', statusDescription: 'Unsafe file path request detected.'});
+        return;
+    }
+
     let arrUri = request.uri.split('/');
     const prefixFolder = arrUri[1];
 

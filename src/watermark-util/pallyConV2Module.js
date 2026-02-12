@@ -9,7 +9,7 @@ const wmUtil = require('./wmUtil');
  * @param gop default: 60
  * @returns {string}
  */
-exports.createWatermarkUrl = (contentPath, watermark, prefixFolder='', streamingFormat, gop=60) =>{
+exports.createWatermarkUrl = (contentPath, watermark, prefixFolder = '', streamingFormat, gop = 60) => {
     let responseUrl = '';
 
     if ('' !== prefixFolder) {
@@ -24,21 +24,21 @@ exports.createWatermarkUrl = (contentPath, watermark, prefixFolder='', streaming
     const fileNameIdx = contentPath.lastIndexOf('/');
 
     //파일 경로
-    waterInfo.path = contentPath.substring(0, fileNameIdx+1);
+    waterInfo.path = contentPath.substring(0, fileNameIdx + 1);
 
     //파일 이름(확장자 포함) 및 파라미터
     if (-1 !== paramSeparator) {
-        waterInfo.fileName = contentPath.substring(fileNameIdx+1, paramSeparator);
+        waterInfo.fileName = contentPath.substring(fileNameIdx + 1, paramSeparator);
         waterInfo.parameter = contentPath.substring(paramSeparator);
     } else {
-        waterInfo.fileName = contentPath.substring(fileNameIdx+1);
+        waterInfo.fileName = contentPath.substring(fileNameIdx + 1);
         waterInfo.parameter = "";
     }
 
     //파일 이름(확장자 제외) 및 확장자
     const extIdx = waterInfo.fileName.lastIndexOf('.');
     waterInfo.name = waterInfo.fileName.substring(0, extIdx);
-    waterInfo.extension = waterInfo.fileName.substring(extIdx+1);
+    waterInfo.extension = waterInfo.fileName.substring(extIdx + 1);
     waterInfo.markedFileUrl = "";
 
     let startNum = 0;
@@ -46,11 +46,11 @@ exports.createWatermarkUrl = (contentPath, watermark, prefixFolder='', streaming
     switch (waterInfo.extension) {
         case 'ts':
             seqNumber = wmUtil.getSequenceNumber(waterInfo.name, 'ts');
-            if( seqNumber < 0 ){
+            if (seqNumber < 0) {
                 break;
             }
 
-            if('dash' !== streamingFormat) {
+            if ('dash' !== streamingFormat) {
                 startNum = 1;
             }
 
@@ -59,22 +59,29 @@ exports.createWatermarkUrl = (contentPath, watermark, prefixFolder='', streaming
             break;
         case 'mp4':
         case 'm4s':
+            //폴더 경로
+            const prefixPath = contentPath.substring(0, waterInfo.fileNameIdx);
+
             if (waterInfo.name.endsWith('_init')) {
                 break;
-            }
+            } else if (checkSubtitle(prefixPath)) {
+                waterInfo.markedFileUrl = wmUtil.makeWatermarkPathFile(waterInfo.path, waterInfo.fileName);
+                break;
+            } else {
+                seqNumber = wmUtil.getSequenceNumber(waterInfo.name, waterInfo.extension);
+                if (seqNumber < 0) {
+                    break;
+                }
 
-            seqNumber = wmUtil.getSequenceNumber(waterInfo.name, waterInfo.extension);
-            if (seqNumber < 0) {
+                if ('hls' === streamingFormat) {
+                    startNum = 1;
+                }
+
+                waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, startNum, seqNumber, gop);
+                waterInfo.markedFileUrl = wmUtil.makeWatermarkPathFile(waterInfo.path, waterInfo.fileName, waterInfo.wmFlag);
                 break;
             }
 
-            if('hls' === streamingFormat) {
-                startNum = 1;
-            }
-
-            waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, startNum, seqNumber, gop);
-            waterInfo.markedFileUrl = wmUtil.makeWatermarkPathFile(waterInfo.path, waterInfo.fileName, waterInfo.wmFlag);
-            break;
         default:
             break;
     }
@@ -87,4 +94,15 @@ exports.createWatermarkUrl = (contentPath, watermark, prefixFolder='', streaming
     responseUrl += waterInfo.markedFileUrl + waterInfo.parameter;
 
     return responseUrl;
+}
+
+const checkSubtitle = (prefixPath) => {
+    var boolSubtitle = false;
+    let pathArr = prefixPath.split('/');
+    let pathArrLength = pathArr.length;
+    console.log("pathArr[pathArrLength-3] : " + pathArr[pathArrLength - 3]); // 처음부터 `/` 가 붙어있어서 -3.
+    if ('subtitle' === pathArr[pathArrLength - 3]) {
+        boolSubtitle = true;
+    }
+    return boolSubtitle;
 }
