@@ -48,9 +48,9 @@ export const config: IConfig = {
     lambdaRoleName : 'PallConWatermarkLambdaRole',
 
     /**
-     * Enter the site key value provided by the PallyCon console site.
+     * Enter the site key value provided by the DoveRunner console site.
      */
-    aesKey: "{Your PallyCon site key}",
+    aesKey: "{Your DoveRunner site key}",
 
     /**
      * The URL requested for watermarking contains a timestamp value.
@@ -63,27 +63,27 @@ export const config: IConfig = {
      * Enter unlabeled_a_variant if preprocessed A/B version segments are stored together
      * in one folder, and enter directory_prefix if they are packaged in separate 0 and 1 folders.
      * If you use the latest version of the FWM CLI packager
-     * or if you are a new customer of PallyCon SaaS packaging service,
+     * or if you are a new customer of DoveRunner SaaS packaging service,
      * it is basically packaged in the form of Unlabeled A Variant. (default: unlabeled_a_variant)
      */
     fwmType: "unlabeled_a_variant",
 
     /**
      * Set the name of the parent folder where the A/B version contents are stored
-     * If you use PallyCon TNP Service, Don't edit.
+     * If you use DoveRunner TNP Service, Don't edit.
      */
     prefixFolder: ['dldzkdpsxmdnjrtm', 'wm-contents'],
 
     /**
      * This is required to operate in the same way as the Akamai wmt format.
-     * Set the wmt public key value provided by the PallyCon helpdesk.
+     * Set the wmt public key value provided by the DoveRunner helpdesk.
      * Required. line separator : \\n (x), \n (o)
      */
-    wmtPublicKey: "{Your PallyCon Akamai Public Key}",
+    wmtPublicKey: "{Your DoveRunner Akamai Public Key}",
 
     /**
      * This is required to operate in the same way as the Akamai wmt format.
-     * Set the wmt password value provided by the PallyCon helpdesk.
+     * Set the wmt password value provided by the DoveRunner helpdesk.
      */
-    wmtPassword: "{Your PallyCon Akamai Key Password}",
+    wmtPassword: "{Your DoveRunner Akamai Key Password}",
 }

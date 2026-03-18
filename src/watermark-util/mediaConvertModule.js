@@ -1,8 +1,6 @@
 const wmUtil = require('./wmUtil');
 
-'use strict';
-
-exports.createWatermarkUrl = (contentPath, watermark, prefixFolder='', streamingFormat, gop=60) =>{
+exports.createWatermarkUrl = (contentPath, watermark, streamingFormat='', prefixFolder='', syncSkipBit =-1, gop=60) => {
     let responseUrl = "/" + prefixFolder;
     let waterInfo = {};
     let separator = contentPath.lastIndexOf('?');
@@ -10,7 +8,7 @@ exports.createWatermarkUrl = (contentPath, watermark, prefixFolder='', streaming
     //파일이름시작index
     waterInfo.fileNameIdx = contentPath.lastIndexOf('/');
     //파라미터가 붙어있는 경우 파라미터를 분리 후 세팅
-    if (-1 !== separator) {
+    if (-1 < separator) {
         waterInfo.fileName = contentPath.substring(waterInfo.fileNameIdx+1, separator);
         waterInfo.parameter = contentPath.substring(separator);
     } else {
@@ -39,7 +37,7 @@ exports.createWatermarkUrl = (contentPath, watermark, prefixFolder='', streaming
                 startNum = 1;
             }
 
-            waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, startNum, seqNumber, gop);
+            waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, startNum, seqNumber, syncSkipBit, gop);
 
             responseUrl += wmUtil.makeWatermarkPathByDir(contentPath, 2, waterInfo.wmFlag);
             break;
@@ -58,7 +56,7 @@ exports.createWatermarkUrl = (contentPath, watermark, prefixFolder='', streaming
                     startNum = 1;
                 }
 
-                waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, startNum, seqNumber, gop);
+                waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, startNum, seqNumber, syncSkipBit, gop);
                 responseUrl += wmUtil.makeWatermarkPathByDir(contentPath, 2, waterInfo.wmFlag);
             }
             break;

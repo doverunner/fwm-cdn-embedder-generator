@@ -1,5 +1,5 @@
 const config = require("./config.json");
-const pallyConAes = require('./wmt/pallyConAes');
+const doveRunnerAes = require('./wmt/doveRunnerAes');
 const akamaiWmt = require("./wmt/akamaiWmt");
 const wmUtil = require("./watermark-util/wmUtil")
 
@@ -31,14 +31,14 @@ exports.handler = async (event, context, callback) => {
         // akamaiWmt 이용
         request = await akamaiWmt.getContentUrl(request, arrUri, config);
     } else {
-        // pallyConAes 이용
+        // doveRunnerAes 이용
         if (checkWatermarkPath(prefixFolder)) {
             // remove revoke token
             const { modifiedArrUri, hasRevokeToken } = wmUtil.removeRevokeToken(arrUri);
             arrUri = modifiedArrUri;
             request.uri = '/' + arrUri.slice(1).join('/');
 
-            request = pallyConAes.getContentUrl(request, arrUri, prefixFolder, config, hasRevokeToken);
+            request = doveRunnerAes.getContentUrl(request, arrUri, prefixFolder, config, hasRevokeToken);
         }
     }
 

@@ -75,12 +75,12 @@ describe('Validator Check', () => {
         expect(jsonData.wmtPassword).toBe('password');
 
         const returnData = '{\n' +
-            '  "aesKey": "{Your PallyCon Site Key}",\n' +
+            '  "aesKey": "{Your DoveRunner Site Key}",\n' +
             '  "type" : "unlabeled_a_variant",\n' +
             '  "availableInterval": 60000,\n' +
             '  "prefixFolder": ["dldzkdpsxmdnjrtm", "wm-contents"],\n' +
-            '  "wmtPublicKey": "{Your PallyCon Akamai Public Key}",\n' +
-            '  "wmtPassword": "{Your PallyCon Akamai Key Password}"\n' +
+            '  "wmtPublicKey": "{Your DoveRunner Akamai Public Key}",\n' +
+            '  "wmtPassword": "{Your DoveRunner Akamai Key Password}"\n' +
             '}';
         fs.writeFileSync('./src/config.json', returnData, 'utf8');
     });

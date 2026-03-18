@@ -1,17 +1,6 @@
 const wmUtil = require('./wmUtil');
 
-'use strict';
-
-/**
- *
- * @param contentPath
- * @param watermark
- * @param prefixFolder default : ''
- * @param streamingFormat
- * @param gop default: 60
- * @returns {string}
- */
-exports.createWatermarkUrl= (contentPath, watermark, prefixFolder='', streamingFormat, gop=60) =>{
+exports.createWatermarkUrl= (contentPath, watermark, streamingFormat='', prefixFolder='', syncSkipBit =-1, gop=60) => {
     let responseUrl = "/" + prefixFolder;
     let waterInfo = {};
     let separator = contentPath.lastIndexOf('?');
@@ -19,7 +8,7 @@ exports.createWatermarkUrl= (contentPath, watermark, prefixFolder='', streamingF
     //파일이름시작index
     waterInfo.fileNameIdx = contentPath.lastIndexOf('/');
     //파라미터가 붙어있는 경우 파라미터를 분리 후 세팅
-    if (-1 !== separator) {
+    if (-1 < separator) {
         waterInfo.fileName = contentPath.substring(waterInfo.fileNameIdx+1, separator);
         waterInfo.parameter = contentPath.substring(separator);
     } else {
@@ -34,9 +23,7 @@ exports.createWatermarkUrl= (contentPath, watermark, prefixFolder='', streamingF
     waterInfo.extension = waterInfo.fileName.substring(waterInfo.extensionIdx+1);
 
     //폴더 경로
-    var prefixPath = contentPath.substring(0, waterInfo.fileNameIdx);
-
-    // var prifixIdx = prefixPath.lastIndexOf('/');
+    const prefixPath = contentPath.substring(0, waterInfo.fileNameIdx);
 
     let startNum = 0;
 
@@ -51,8 +38,6 @@ exports.createWatermarkUrl= (contentPath, watermark, prefixFolder='', streamingF
                 responseUrl += wmUtil.makeWatermarkPathByDir(contentPath, 5);
             } else if ('subtitle.m3u8' === waterInfo.fileName ) {
                 responseUrl += wmUtil.makeWatermarkPathByDir(contentPath, 4);
-                // }else{
-                //     responseUrl += wmUtil.makeWatermarkPathByDir(contentPath, 4);
             }
             break;
         case 'ts':
@@ -65,7 +50,7 @@ exports.createWatermarkUrl= (contentPath, watermark, prefixFolder='', streamingF
                 startNum = 1;
             }
 
-            waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, startNum, seqNumber, gop);
+            waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, startNum, seqNumber, syncSkipBit, gop);
             responseUrl += wmUtil.makeWatermarkPathByDir(contentPath, 5, waterInfo.wmFlag);
             break;
         case 'm4s':
@@ -84,7 +69,7 @@ exports.createWatermarkUrl= (contentPath, watermark, prefixFolder='', streamingF
                     startNum = 1;
                 }
 
-                waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, startNum, seqNumber, gop);
+                waterInfo.wmFlag = wmUtil.makeWatermarkFlag(watermark, startNum, seqNumber, syncSkipBit, gop);
                 responseUrl += wmUtil.makeWatermarkPathByDir(contentPath, 5, waterInfo.wmFlag);
             }
             break;
@@ -115,11 +100,11 @@ exports.createWatermarkUrl= (contentPath, watermark, prefixFolder='', streamingF
 const makeDefaultPath = (contentPath) =>{
     const flagFolders = ['dash', 'hls', 'cmaf'];
 
-    var responseUrl = "";
-    var pathArr = contentPath.split('/');
-    var pathArrLength = pathArr.length;
+    let responseUrl = "";
+    const pathArr = contentPath.split('/');
+    const pathArrLength = pathArr.length;
 
-    for (var i=1; i<pathArrLength; i++) {
+    for (let i=1; i<pathArrLength; i++) {
         if (flagFolders.includes(pathArr[i])) {
             responseUrl += '/0';
         }
@@ -129,7 +114,7 @@ const makeDefaultPath = (contentPath) =>{
 }
 
 const checkSubtitle = (prefixPath) =>{
-    var boolSubtitle = false;
+    let boolSubtitle = false;
     let pathArr = prefixPath.split('/');
     let pathArrLength = pathArr.length;
     console.log("pathArr[pathArrLength-2] : " + pathArr[pathArrLength-2]);

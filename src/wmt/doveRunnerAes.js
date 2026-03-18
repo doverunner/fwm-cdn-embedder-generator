@@ -1,7 +1,7 @@
 const watermarkUtil= require("../watermark-util");
 const mediaConvertModule= require("../watermark-util/mediaConvertModule");
-const unlabeledAVariantModule= require("../watermark-util/pallyConV2Module");
-const directoryPrefixModule= require("../watermark-util/pallyConModule");
+const unlabeledAVariantModule= require("../watermark-util/unlabeledAVariantModule");
+const directoryPrefixModule= require("../watermark-util/directoryPrefixModule");
 
 exports.getContentUrl = (req, arrUri, prefixFolder, config, hasRevokeToken) =>{
     let watermarkData = arrUri[2];
@@ -19,7 +19,8 @@ exports.getContentUrl = (req, arrUri, prefixFolder, config, hasRevokeToken) =>{
         "streaming_format": <dash/hls>,
         "gop":60,
         "timestamp": < YYYY-mm-ddThh:mm:ssZ >,
-        "revoke_flag": <true,false>
+        "revoke_flag": <true,false>,
+        "sync_skip_bit": -1
     }
      */
 
@@ -28,6 +29,7 @@ exports.getContentUrl = (req, arrUri, prefixFolder, config, hasRevokeToken) =>{
     const timeStamp = watermarkInfo.timestamp;
     const streamingFormat = watermarkInfo.streaming_format;
     const revokeFlag = watermarkInfo.revoke_flag;
+    const syncSkipBit = watermarkInfo.sync_skip_bit? watermarkInfo.sync_skip_bit : -1
 
     // Check revoke flag - if revoke_flag is true but revoke_token was not present, deny access
     if (revokeFlag && !hasRevokeToken) {
@@ -52,7 +54,7 @@ exports.getContentUrl = (req, arrUri, prefixFolder, config, hasRevokeToken) =>{
 
         const contentPath = req.uri.substring(arrUri[2].length + 2 + prefixFolder.length);
 
-        req.uri = fwmModule.createWatermarkUrl(contentPath, watermark, prefixFolder, streamingFormat);
+        req.uri = fwmModule.createWatermarkUrl(contentPath, watermark, streamingFormat, prefixFolder, syncSkipBit);
         console.log('response uri : ', req.uri);
 
     } else {

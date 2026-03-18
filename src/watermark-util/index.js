@@ -1,7 +1,5 @@
 const crypto = require('crypto');
 
-'use strict';
-
 const AES_IV = '0123456789abcdef';
 
 exports.aesDecrypt = (watermarkData, aesKey) => {

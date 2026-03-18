@@ -77,7 +77,7 @@ export class ConfigValidator implements IValidator {
      * @private
      */
     private checkAesKey() {
-        if ('{Your PallyCon Site Key}' === this.config.aesKey || 32 !== this.config.aesKey.length) {
+        if ('{Your DoveRunner Site Key}' === this.config.aesKey || 32 !== this.config.aesKey.length) {
             throw new Error('aesKey value is invalid. please check it.');
         }
     }

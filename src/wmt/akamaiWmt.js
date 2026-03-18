@@ -1,7 +1,5 @@
-const unlabeledAVariantModule = require("../watermark-util/pallyConV2Module");
+const unlabeledAVariantModule = require("../watermark-util/unlabeledAVariantModule");
 const crypto = require('crypto');
-
-'use strict';
 
 exports.getContentUrl = async (req, arrUri, config) =>{
     if (!config.wmtPublicKey || !config.wmtPassword) {
@@ -32,8 +30,8 @@ exports.getContentUrl = async (req, arrUri, config) =>{
 /**
  * parses akamai wmt token and returns watermarkData.
  * @param jwt :wmt:{xxx}
- * @param wmtPublicKey akamai public key issued by pallycon. wmtPublicKey in the config.json file.
- * @param passwd akamai password issued by pallycon. wmtPassword in the config.json file.
+ * @param wmtPublicKey akamai public key issued by DoveRunner. wmtPublicKey in the config.json file.
+ * @param passwd akamai password issued by DoveRunner. wmtPassword in the config.json file.
  * @returns {Promise<string>} watermark data
  */
 const parsingToken = async (jwt, wmtPublicKey, passwd) => {
@@ -45,8 +43,6 @@ const parsingToken = async (jwt, wmtPublicKey, passwd) => {
         }
 
         const payload = getPayloadFromJwt(jwt);
-        // console.log('payload :', payload);
-        // console.log('payload[\'wmidivb64\'] : ', payload['wmidivb64']);
 
         const aesKey = crypto.createHash('sha256').update(passwd).digest();
         const aesIv = new Buffer.from(payload['wmidivb64'], 'base64');

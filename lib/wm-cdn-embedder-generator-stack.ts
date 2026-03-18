@@ -27,7 +27,7 @@ export class WmCdnEmbedderGeneratorStack extends Stack {
 
     // Create the Origin Access Identity.
     const oai = new OriginAccessIdentity(this, 'oai', {
-      comment: 'PallyConWatermarkOAI'
+      comment: 'DoveRunnerWatermarkOAI'
     });
     console.log('originAccessIdentity stack is created.');
 
